@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form - Copilot Bug Intelligence</title>
+    
+    <!-- 
+    ====================================================================
+    CSS STYLES SECTION
+    ====================================================================
+    This section contains all the styling for the login form.
+    Using embedded CSS to keep everything in a single file for simplicity.
+    -->
+    <style>
+        /* 
+         * Global styles and CSS reset
+         * Sets consistent typography and removes default browser styling
+         */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* 
+         * Main container styles
+         * Creates a centered card layout for the login form
+         */
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* 
+         * Form group styles
+         * Consistent spacing and layout for form elements
+         */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* 
+         * Input field styles
+         * Consistent styling for username and password fields
+         */
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* 
+         * Input validation states
+         * Visual feedback for validation errors and success
+         */
+        .form-input.error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        .form-input.success {
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        }
+
+        /* 
+         * Error message styles
+         * Display validation error messages below form fields
+         */
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* 
+         * Button container and button styles
+         * Layout and styling for SUBMIT and RESET buttons
+         */
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-reset {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-reset:active {
+            transform: translateY(0);
+        }
+
+        /* 
+         * Success message styles
+         * Display success feedback after successful validation
+         */
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 20px;
+            display: none;
+            border: 1px solid #c3e6cb;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* 
+         * Responsive design
+         * Adjust layout for smaller screens
+         */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+            
+            .button-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+    ====================================================================
+    HTML STRUCTURE SECTION
+    ====================================================================
+    This section contains the main HTML structure for the login form.
+    -->
+    
+    <div class="login-container">
+        <!-- Header section with title and description -->
+        <div class="login-header">
+            <h1>Login</h1>
+            <p>Please enter your credentials to continue</p>
+        </div>
+
+        <!-- 
+         * Main login form
+         * Contains username and password fields with validation
+         * Form submission is handled by JavaScript
+         -->
+        <form id="loginForm" novalidate>
+            <!-- Username field with label and error message -->
+            <div class="form-group">
+                <label for="usernameField">Username:</label>
+                <input 
+                    type="text" 
+                    id="usernameField" 
+                    name="username" 
+                    class="form-input"
+                    placeholder="Enter your username"
+                    autocomplete="username"
+                />
+                <div id="usernameError" class="error-message"></div>
+            </div>
+
+            <!-- Password field with label and error message -->
+            <div class="form-group">
+                <label for="passwordField">Password:</label>
+                <input 
+                    type="password" 
+                    id="passwordField" 
+                    name="password" 
+                    class="form-input"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                />
+                <div id="passwordError" class="error-message"></div>
+            </div>
+
+            <!-- Button container with SUBMIT and RESET buttons -->
+            <div class="button-container">
+                <button type="submit" id="submitButton" class="btn btn-submit">
+                    Submit
+                </button>
+                <button type="button" id="resetButton" class="btn btn-reset">
+                    Reset
+                </button>
+            </div>
+
+            <!-- Success message container -->
+            <div id="successMessage" class="success-message">
+                Login form validated successfully! All fields meet the requirements.
+            </div>
+        </form>
+    </div>
+
+    <!-- 
+    ====================================================================
+    JAVASCRIPT SECTION
+    ====================================================================
+    This section contains all the JavaScript functionality for form validation,
+    form submission handling, and form reset functionality.
+    -->
+    <script>
+        /**
+         * ================================================================
+         * CONSTANTS AND CONFIGURATION
+         * ================================================================
+         */
+        
+        // DOM element references for better performance and readability
+        const DOM_ELEMENTS = {
+            form: document.getElementById('loginForm'),
+            usernameField: document.getElementById('usernameField'),
+            passwordField: document.getElementById('passwordField'),
+            submitButton: document.getElementById('submitButton'),
+            resetButton: document.getElementById('resetButton'),
+            usernameError: document.getElementById('usernameError'),
+            passwordError: document.getElementById('passwordError'),
+            successMessage: document.getElementById('successMessage')
+        };
+
+        // Validation rules and patterns
+        const VALIDATION_RULES = {
+            PASSWORD_MIN_LENGTH: 8,
+            UPPERCASE_PATTERN: /[A-Z]/,
+            SPECIAL_CHAR_PATTERN: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
+        };
+
+        // Error messages for different validation scenarios
+        const ERROR_MESSAGES = {
+            USERNAME_REQUIRED: 'Username is required and cannot be empty.',
+            PASSWORD_REQUIRED: 'Password is required and cannot be empty.',
+            PASSWORD_TOO_SHORT: 'Password must be at least 8 characters long.',
+            PASSWORD_NO_UPPERCASE: 'Password must contain at least one uppercase letter.',
+            PASSWORD_NO_SPECIAL_CHAR: 'Password must contain at least one special character (!@#$%^&*()_+-=[]{}|;:,.<>?).'
+        };
+
+        /**
+         * ================================================================
+         * VALIDATION FUNCTIONS
+         * ================================================================
+         */
+
+        /**
+         * Validates if a field is not empty
+         * @param {string} value - The value to validate
+         * @returns {boolean} - True if valid, false otherwise
+         */
+        function validateRequired(value) {
+            return value !== null && value !== undefined && value.trim().length > 0;
+        }
+
+        /**
+         * Validates password length requirement
+         * @param {string} password - The password to validate
+         * @returns {boolean} - True if valid, false otherwise
+         */
+        function validatePasswordLength(password) {
+            return password.length >= VALIDATION_RULES.PASSWORD_MIN_LENGTH;
+        }
+
+        /**
+         * Validates password contains at least one uppercase letter
+         * @param {string} password - The password to validate
+         * @returns {boolean} - True if valid, false otherwise
+         */
+        function validatePasswordUppercase(password) {
+            return VALIDATION_RULES.UPPERCASE_PATTERN.test(password);
+        }
+
+        /**
+         * Validates password contains at least one special character
+         * @param {string} password - The password to validate
+         * @returns {boolean} - True if valid, false otherwise
+         */
+        function validatePasswordSpecialChar(password) {
+            return VALIDATION_RULES.SPECIAL_CHAR_PATTERN.test(password);
+        }
+
+        /**
+         * Comprehensive username validation
+         * @param {string} username - The username to validate
+         * @returns {Object} - Validation result with isValid boolean and error message
+         */
+        function validateUsername(username) {
+            if (!validateRequired(username)) {
+                return {
+                    isValid: false,
+                    errorMessage: ERROR_MESSAGES.USERNAME_REQUIRED
+                };
+            }
+
+            return {
+                isValid: true,
+                errorMessage: ''
+            };
+        }
+
+        /**
+         * Comprehensive password validation
+         * @param {string} password - The password to validate
+         * @returns {Object} - Validation result with isValid boolean and error message
+         */
+        function validatePassword(password) {
+            if (!validateRequired(password)) {
+                return {
+                    isValid: false,
+                    errorMessage: ERROR_MESSAGES.PASSWORD_REQUIRED
+                };
+            }
+
+            if (!validatePasswordLength(password)) {
+                return {
+                    isValid: false,
+                    errorMessage: ERROR_MESSAGES.PASSWORD_TOO_SHORT
+                };
+            }
+
+            if (!validatePasswordUppercase(password)) {
+                return {
+                    isValid: false,
+                    errorMessage: ERROR_MESSAGES.PASSWORD_NO_UPPERCASE
+                };
+            }
+
+            if (!validatePasswordSpecialChar(password)) {
+                return {
+                    isValid: false,
+                    errorMessage: ERROR_MESSAGES.PASSWORD_NO_SPECIAL_CHAR
+                };
+            }
+
+            return {
+                isValid: true,
+                errorMessage: ''
+            };
+        }
+
+        /**
+         * ================================================================
+         * UI HELPER FUNCTIONS
+         * ================================================================
+         */
+
+        /**
+         * Shows error message and applies error styling to a field
+         * @param {HTMLElement} field - The input field element
+         * @param {HTMLElement} errorElement - The error message element
+         * @param {string} message - The error message to display
+         */
+        function showFieldError(field, errorElement, message) {
+            field.classList.remove('success');
+            field.classList.add('error');
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+
+        /**
+         * Hides error message and applies success styling to a field
+         * @param {HTMLElement} field - The input field element
+         * @param {HTMLElement} errorElement - The error message element
+         */
+        function showFieldSuccess(field, errorElement) {
+            field.classList.remove('error');
+            field.classList.add('success');
+            errorElement.textContent = '';
+            errorElement.classList.remove('show');
+        }
+
+        /**
+         * Clears all validation states and messages
+         */
+        function clearValidationState() {
+            // Clear username field state
+            DOM_ELEMENTS.usernameField.classList.remove('error', 'success');
+            DOM_ELEMENTS.usernameError.classList.remove('show');
+            DOM_ELEMENTS.usernameError.textContent = '';
+
+            // Clear password field state
+            DOM_ELEMENTS.passwordField.classList.remove('error', 'success');
+            DOM_ELEMENTS.passwordError.classList.remove('show');
+            DOM_ELEMENTS.passwordError.textContent = '';
+
+            // Hide success message
+            DOM_ELEMENTS.successMessage.classList.remove('show');
+        }
+
+        /**
+         * ================================================================
+         * FORM HANDLING FUNCTIONS
+         * ================================================================
+         */
+
+        /**
+         * Validates the entire form and shows appropriate feedback
+         * @returns {boolean} - True if form is valid, false otherwise
+         */
+        function validateForm() {
+            let isFormValid = true;
+
+            // Get current field values
+            const usernameValue = DOM_ELEMENTS.usernameField.value;
+            const passwordValue = DOM_ELEMENTS.passwordField.value;
+
+            // Validate username
+            const usernameValidation = validateUsername(usernameValue);
+            if (usernameValidation.isValid) {
+                showFieldSuccess(DOM_ELEMENTS.usernameField, DOM_ELEMENTS.usernameError);
+            } else {
+                showFieldError(DOM_ELEMENTS.usernameField, DOM_ELEMENTS.usernameError, usernameValidation.errorMessage);
+                isFormValid = false;
+            }
+
+            // Validate password
+            const passwordValidation = validatePassword(passwordValue);
+            if (passwordValidation.isValid) {
+                showFieldSuccess(DOM_ELEMENTS.passwordField, DOM_ELEMENTS.passwordError);
+            } else {
+                showFieldError(DOM_ELEMENTS.passwordField, DOM_ELEMENTS.passwordError, passwordValidation.errorMessage);
+                isFormValid = false;
+            }
+
+            // Show success message if form is valid
+            if (isFormValid) {
+                DOM_ELEMENTS.successMessage.classList.add('show');
+            } else {
+                DOM_ELEMENTS.successMessage.classList.remove('show');
+            }
+
+            return isFormValid;
+        }
+
+        /**
+         * Handles form submission
+         * @param {Event} event - The form submission event
+         */
+        function handleFormSubmit(event) {
+            // Prevent default form submission behavior
+            event.preventDefault();
+
+            // Validate the form
+            const isValid = validateForm();
+
+            if (isValid) {
+                console.log('Form validation successful!');
+                console.log('Username:', DOM_ELEMENTS.usernameField.value);
+                console.log('Password length:', DOM_ELEMENTS.passwordField.value.length);
+                // In a real application, you would submit the form data to a server here
+            } else {
+                console.log('Form validation failed. Please check the errors above.');
+            }
+        }
+
+        /**
+         * Handles form reset functionality
+         */
+        function handleFormReset() {
+            // Clear form fields
+            DOM_ELEMENTS.usernameField.value = '';
+            DOM_ELEMENTS.passwordField.value = '';
+
+            // Clear all validation states and messages
+            clearValidationState();
+
+            // Focus on the username field for better user experience
+            DOM_ELEMENTS.usernameField.focus();
+
+            console.log('Form has been reset successfully.');
+        }
+
+        /**
+         * ================================================================
+         * EVENT LISTENERS AND INITIALIZATION
+         * ================================================================
+         */
+
+        /**
+         * Initialize the form and set up event listeners
+         * This function runs when the DOM is fully loaded
+         */
+        function initializeForm() {
+            // Form submission event listener
+            DOM_ELEMENTS.form.addEventListener('submit', handleFormSubmit);
+
+            // Reset button event listener
+            DOM_ELEMENTS.resetButton.addEventListener('click', handleFormReset);
+
+            // Real-time validation on input blur (when user leaves a field)
+            DOM_ELEMENTS.usernameField.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    const validation = validateUsername(this.value);
+                    if (validation.isValid) {
+                        showFieldSuccess(this, DOM_ELEMENTS.usernameError);
+                    } else {
+                        showFieldError(this, DOM_ELEMENTS.usernameError, validation.errorMessage);
+                    }
+                }
+            });
+
+            DOM_ELEMENTS.passwordField.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    const validation = validatePassword(this.value);
+                    if (validation.isValid) {
+                        showFieldSuccess(this, DOM_ELEMENTS.passwordError);
+                    } else {
+                        showFieldError(this, DOM_ELEMENTS.passwordError, validation.errorMessage);
+                    }
+                }
+            });
+
+            // Clear validation state when user starts typing again
+            DOM_ELEMENTS.usernameField.addEventListener('input', function() {
+                if (this.classList.contains('error')) {
+                    this.classList.remove('error');
+                    DOM_ELEMENTS.usernameError.classList.remove('show');
+                }
+            });
+
+            DOM_ELEMENTS.passwordField.addEventListener('input', function() {
+                if (this.classList.contains('error')) {
+                    this.classList.remove('error');
+                    DOM_ELEMENTS.passwordError.classList.remove('show');
+                }
+            });
+
+            // Set initial focus on username field
+            DOM_ELEMENTS.usernameField.focus();
+
+            console.log('Login form initialized successfully.');
+        }
+
+        // Initialize the form when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', initializeForm);
+
+        /**
+         * ================================================================
+         * DOCUMENTATION SUMMARY
+         * ================================================================
+         * 
+         * This login form implements the following features:
+         * 
+         * 1. HTML Structure:
+         *    - Semantic HTML5 with proper form elements
+         *    - Accessible labels and input associations
+         *    - Username and password fields with proper types
+         *    - Submit and Reset buttons with clear naming
+         * 
+         * 2. CSS Styling:
+         *    - Modern, responsive design with gradient background
+         *    - Card-based layout with subtle shadows
+         *    - Visual feedback for validation states (error/success)
+         *    - Smooth transitions and hover effects
+         *    - Mobile-responsive design
+         * 
+         * 3. JavaScript Functionality:
+         *    - Comprehensive form validation:
+         *      * Username: Required, non-empty
+         *      * Password: Required, minimum 8 characters, uppercase letter, special character
+         *    - Real-time validation feedback on field blur
+         *    - Form submission with validation
+         *    - Form reset functionality
+         *    - Clear error messaging
+         *    - Success feedback
+         * 
+         * 4. Validation Rules:
+         *    - Username: Cannot be empty or contain only whitespace
+         *    - Password: Minimum 8 characters, at least one uppercase letter (A-Z),
+         *      at least one special character (!@#$%^&*()_+-=[]{}|;:,.<>?)
+         * 
+         * 5. User Experience:
+         *    - Visual feedback with color-coded validation states
+         *    - Clear error messages explaining requirements
+         *    - Smooth animations and transitions
+         *    - Keyboard accessibility
+         *    - Focus management
+         * 
+         * 6. Code Organization:
+         *    - Modular JavaScript functions with clear responsibilities
+         *    - Consistent naming conventions using camelCase
+         *    - Comprehensive documentation and comments
+         *    - Separation of concerns (HTML structure, CSS styling, JS behavior)
+         * 
+         * 7. Browser Compatibility:
+         *    - Uses modern JavaScript (ES6+) features
+         *    - Progressive enhancement approach
+         *    - Graceful degradation for older browsers
+         */
+    </script>
+</body>
+</html>
